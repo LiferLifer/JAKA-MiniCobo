@@ -1,43 +1,44 @@
 import os
 import sys
 import ctypes
-
 import platform
 
-# 获取当前系统名称
 __system = platform.system()
 
 if __system == "Windows":
-    print("当前系统为Windows")
+    print("Windows!")
     def init_env():
-        base_dir = os.path.abspath('.')
+        print("No Windows SDK, please use Linux SDK.")
 
-        # 指定 Linux 动态库查找路径
-        syspath = os.path.join(base_dir, r'out\python3\Release')
-        sys.path.append(syspath)
-
-        # 指定Linux Python jkzuc模块查找路径
-        env_path = os.path.join(base_dir, r'out\shared\Release')
-        path_env = os.environ.get('PATH')
-        path_env = env_path + ';' + path_env
-        os.environ['PATH'] = path_env
-        # print('env: {}'.format(os.environ['PATH']))
 elif __system == "Linux":
-    print("当前系统为Linux")
+    print("Linux!")
     def init_env():
-        base_dir = os.path.abspath('.')
+        # Linux 需要将 libjakaAPI.so 和 jkrc.so 放在同一个文件夹下，并添加当前文件夹路径到环境变量
+        # .bashrc: export LD_LIBRARY_PATH=/xx/xx/
 
-        # 加载Windows 动态库 libjakaAPI.so
-        env_path = os.path.join(base_dir, r'out/shared/libjakaAPI.so')
-        ctypes.CDLL(env_path)
+        lib_path = os.getenv("LD_LIBRARY_PATH")
+        if lib_path is None:
+            print("Please set LD_LIBRARY_PATH in .bashrc")
+            sys.exit(0)
+        else:
+            path_libjakaAPI = lib_path + "/libjakaAPI.so"
+            path_jkrc = lib_path + "/jkrc.so"
+            if not os.path.exists(path_libjakaAPI):
+                print("libjakaAPI.so not exist.")
+                sys.exit(0)
+            if not os.path.exists(path_jkrc):
+                print("jkrc.so not exist.")
+                sys.exit(0)
+            try:
+                sys.path.append(lib_path)
+                ctypes.CDLL(path_libjakaAPI)
+                ctypes.CDLL(path_jkrc)
+            except Exception as e:
+                print("Load so failed: {}".format(e))
+                sys.exit(0)
 
-        # 加载Window Python jkzuc模块查找路径
-        syspath = os.path.join(base_dir, r'out/python3')
-        sys.path.append(syspath)
-        # print('SYS PATH: {}\n {}'.format(sys.path, syspath))
-        # print('LD_LIBRARY_PATH: {}'.format(os.environ['LD_LIBRARY_PATH']))
 else:
-    print("未知系统")
+    print("what's this?")
 
 
 if __name__ == '__main__':
