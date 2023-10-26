@@ -3,7 +3,8 @@ import time
 import __common
 
 def main():
-    rc = jkrc.RC("192.168.137.173")
+    robot_IP = "192.168.200.100"
+    rc = jkrc.RC(robot_IP)
     print(rc.login())
     print(rc.power_on())
     print(rc.enable_robot())
@@ -18,5 +19,4 @@ def main():
 if __name__ == '__main__':
     __common.init_env()
     import jkrc
-
     main()

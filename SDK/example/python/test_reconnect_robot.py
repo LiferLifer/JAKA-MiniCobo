@@ -3,8 +3,9 @@ import time
 import __common
 
 def main():
-    ###################### 测试代码开始 ######################
-    rc = jkrc.RC("192.168.137.138")
+
+    robot_IP = "192.168.200.100"
+    rc = jkrc.RC(robot_IP)
 
     while True:
         print("===================")
@@ -18,11 +19,9 @@ def main():
         print('logout: {}'.format(rc.logout()))
 
         print()
-    ###################### 测试代码结束 ######################
 
 
 if __name__ == '__main__':
     __common.init_env()
     import jkrc
-
     main()
