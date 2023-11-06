@@ -14,11 +14,11 @@ elif __system == "Linux":
     print("Linux!")
     def init_env():
         # Linux 需要将 libjakaAPI.so 和 jkrc.so 放在同一个文件夹下，并添加当前文件夹路径到环境变量
-        # .bashrc: export LD_LIBRARY_PATH=/xx/xx/
+        # .bashrc: export LD_JAKA_LIBRARY_PATH=/xx/xx/
 
-        lib_path = os.getenv("LD_LIBRARY_PATH")
+        lib_path = os.getenv("LD_JAKA_LIBRARY_PATH")
         if lib_path is None:
-            print("Please set LD_LIBRARY_PATH in .bashrc")
+            print("Please set LD_JAKA_LIBRARY_PATH in .bashrc")
             sys.exit(0)
         else:
             path_libjakaAPI = lib_path + "/libjakaAPI.so"
